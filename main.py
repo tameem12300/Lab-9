@@ -12,9 +12,7 @@ class StepsNote(db.Model):
 
 @app.route('/', methods=['GET'])
 def index():
-    # Fetching all step notes and reversing the order for display
     step_notes = StepsNote.query.order_by(StepsNote.id.desc()).all()
-    # Calculating the total number of steps
     total_steps = sum(note.steps for note in step_notes) if step_notes else 0
     return flask.render_template('index.html', step_notes=step_notes, total_steps=total_steps)
 
