@@ -1,35 +1,62 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Best store!</title>
-    <script type="text/javascript" src="/static/update.js"></script>
-    <link href="static/store.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>stepgo </title>
+    <style>
+        body {
+            background-color: #367a5a;
+            font-family: Arial, sans-serif;
+        }
+        h2, h3 {
+            color: #5A2A27;
+        }
+        .input-label, .step-entry {
+            color: #2F4550;
+        }
+        button {
+            background-color: #5A2A27;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Furniture store:</h1>
-    <h3>Add new product:</h3>
-    <form>
-        <div>
-            <input type="text" name="prod_name" id="prod_name">
-            <label for="prod_name">Product name</label>
-        </div>
-        <div>
-            <input type="number" name="price" id="price">
-            <label for="price">Price (rub.)</label>
-        </div>
-        <button onClick="addProduct()">Add</button>
+    <h2>Steps</h2>
+    <form method="post" action="/add_step">
+        <label class="input-label">Steps: </label><input type="text" name="step"><br>
+        <label class="input-label">Date: </label><input type="date" name="date"><br>
+        <button type="submit">Add steps note</button>
     </form>
-    <ul>
-        {% for product in products_list %}
-        <li>
-            <div>
-                <div>{{ product['prod_name'] }}</div>
-                <div>{{ product['price'] }} rub.</div>
-                <input value="{{product['id']}}" onChange="updateProd(this)" name="in_stock" type="checkbox" {% if product.in_stock %} checked {% endif %}>
-                <label for="in_stock">In stock</label>
-            </div>
-        </li>
+
+    <h3>Steps history</h3>
+    <div>Total Steps: <strong>{{ total_steps }}</strong></div>
+    {% if step_notes %}
+        {% for step in step_notes %}
+        <div class="step-entry">
+            <b>{{ step.steps }}</b><br>
+            <i>{{ step.date }}</i>
+        </div>
         {% endfor %}
-    </ul>
+    {% else %}
+        <div>No steps recorded yet.</div>
+    {% endif %}
+    <a href="/delete_all"><button>Clear</button></a>
+
+    <!-- Area for displaying flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div style="color: red;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </body>
 </html>
